@@ -15,5 +15,6 @@ MonoBehaviour:
   usesAmmo: 0
   ammo: 8
   index: 1
-  hitScan: 1
+  hitScan: 0
   damage: 2
+  projectile: {fileID: 1307736999039248490, guid: c55c71ddce362e241a367cb21d991b07, type: 3}

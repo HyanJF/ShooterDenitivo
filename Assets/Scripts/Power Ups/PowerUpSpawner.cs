@@ -30,18 +30,17 @@ public class PowerUpSpawner : NetworkBehaviour
     [Server]
     private void CmdSpawn()
     {
-        spawned = Instantiate(powerUps[(int)maiType], transform.position, Quaternion.identity);
+        var pu = powerUps[(int)maiType];
+        spawned = Instantiate(pu, transform.position + pu.transform.position, pu.transform.rotation);
         spawned.GetComponent<APickUp>().Initialize(this);
         
         NetworkServer.Spawn(spawned);
         
     }
 
- 
-
     public IEnumerator CollectPowerUp()
     {
-        var foo = spawned.GetComponent<Health>();
+        var foo = spawned.GetComponent<APickUp>();
         foo.isActive = false;
 
         yield return new WaitForSeconds(spawnTime);

@@ -1,10 +1,6 @@
 using UnityEngine;
 using Mirror;
 
-/*
-	Documentation: https://mirror-networking.gitbook.io/docs/guides/networkbehaviour
-	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
-*/
 
 public abstract class APickUp : NetworkBehaviour
 {
