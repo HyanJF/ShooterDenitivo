@@ -16,8 +16,9 @@ GameObject:
   - component: {fileID: 2322236317794245428}
   - component: {fileID: 4747593298966053782}
   - component: {fileID: 8135201711193956328}
+  - component: {fileID: 8752353463480773892}
   m_Layer: 0
-  m_Name: bullet
+  m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,3 +225,25 @@ MonoBehaviour:
   rotationSensitivity: 0.01
   positionPrecision: 0.01
   scalePrecision: 0.01
+--- !u!114 &8752353463480773892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307736999039248490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c54bfa1e59f49046955829bb3e65025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  damage: 2
+  speed: 250
+  destroyOnHit: 1
+  lifetime: 1
+  rb: {fileID: 4747593298966053782}
+  owner: {fileID: 0}
+  team: 0

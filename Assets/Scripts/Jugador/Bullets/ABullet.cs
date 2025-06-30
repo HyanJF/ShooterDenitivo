@@ -28,6 +28,8 @@ public abstract class ABullet : NetworkBehaviour
             }
             Debug.LogAssertion("Compa, olvidaste el Rigidbody");
 		}
+		team = elTeamo;
+		owner = player;
 	}
 	
 	public virtual void HasHit(Collision col)

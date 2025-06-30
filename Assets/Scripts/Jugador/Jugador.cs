@@ -14,7 +14,7 @@ public class Jugador : NetworkBehaviour
     private Vector3 _moveDirection = new Vector3();
     public float moveSpeed = 10;
     public float speedLimit = 10;
-    
+
     [Header("Gravedad")]
     public float gravityNormal = 50f;
     public float gravityJump = 9.81f;
@@ -48,7 +48,7 @@ public class Jugador : NetworkBehaviour
     [SyncVar(hook = nameof(NameChanged))]
     private string username;
 
-    [Header("Team")] 
+    [Header("Team")]
     [SyncVar(hook = nameof(OnChangeTeam))]
     private Teams myTeam = Teams.None;
 
@@ -71,10 +71,10 @@ public class Jugador : NetworkBehaviour
         _rb.useGravity = false;
         maxHp = hp;
     }
-    
+
     void FixedUpdate()
     {
-        if(!isLocalPlayer)return;
+        if (!isLocalPlayer) return;
         Vector3 flat = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
         Quaternion orientation = Quaternion.LookRotation(flat);
         Vector3 worldMoveDirection = orientation * _moveDirection;
@@ -101,7 +101,7 @@ public class Jugador : NetworkBehaviour
         _pitch += _camInput.y * camSpeed * Time.deltaTime;
 
         _pitch = _pitch > maxPitch ? maxPitch : _pitch < (-maxPitch) ? -maxPitch : _pitch;
-        transform.eulerAngles = new Vector3(0, _yaw,0);
+        transform.eulerAngles = new Vector3(0, _yaw, 0);
         transformCam.eulerAngles = new Vector3(-_pitch, transformCam.rotation.eulerAngles.y, transformCam.rotation.eulerAngles.z);
     }
     #endregion
@@ -112,10 +112,12 @@ public class Jugador : NetworkBehaviour
     public GameObject[] weapons;
     public GameObject[] publicWeapon;
 
+    public GameObject particule;
+
     public void WeaponChanged(WeaponData old, WeaponData newWeapon)
     {
         if (isLocalPlayer)
-        { 
+        {
             weapons[old.index].SetActive(false);
             weapons[newWeapon.index].SetActive(true);
         }
@@ -126,13 +128,22 @@ public class Jugador : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    private void RPCSpawnParticle(Vector3 point, Vector3 direction)
+    {
+        Instantiate(particule, point, Quaternion.LookRotation(direction));
+    }
+
+
     [Command]
     private void CommandShoot(Vector3 origen, Vector3 direccion)
     {
+        RPCSpawnParticle(origen, direccion);
         if (currentWeapon.hitScan == true)
         {
             if (Physics.Raycast(origen, direccion, out RaycastHit hit, 100f))
             {
+                RPCSpawnParticle(hit.point, direccion * -1);
                 if (hit.collider.gameObject.TryGetComponent<Jugador>(out Jugador elGolpeado) == true)
                 {
                     if (elGolpeado.TakeDamage(1, myTeam))
@@ -145,7 +156,8 @@ public class Jugador : NetworkBehaviour
         else
         {
             GameObject bullet = Instantiate(currentProjectile, origen, Quaternion.LookRotation(direccion));
-            bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * 20, ForceMode.Impulse);
+            bullet.GetComponent<ABullet>().Initialize(this, myTeam);
+            NetworkServer.Spawn(bullet);
         }
     }
 
