@@ -166,6 +166,14 @@ public class Jugador : NetworkBehaviour
         Debug.Log("ETC...");
     }
     #endregion
+    #region Effects
+    [TargetRpc]
+    public void GitPushed(Vector3 where, float force, float radius)
+    {
+        Debug.Log("Ya jalé perro UwU");
+        _rb.AddExplosionForce(force, where, radius);
+    }
+    #endregion
     #region HP
     [Server]
     public bool TakeDamage(int amount, Teams elTeamo)
